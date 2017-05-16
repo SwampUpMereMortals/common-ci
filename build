@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+# This is an incredibly crude installation script that bundles up
+# shell scripts into a debian package.  Props go to
+# https://askubuntu.com/questions/27715/create-a-deb-package-from-scripts-or-binaries/27731#27731
+# for saving me about a week wrestling with deb packages.
+set -o nounset
+set -o errexit -o errtrace
+
+declare VERSION=$(cat VERSION)
+declare OPT_PATH=/opt/mere-mortals/swampup/
+
+# Package the scripts.
+mkdir "mere-mortal-ci-${VERSION}"
+# TODO: Remove debugging lines.  Travis doesn't like this script much.
+ls -l
+cd "mere-mortal-ci-${VERSION}"
+cp ../scripts/*.sh .
+cp ../settings/java/settings.xml .
+yes | dh_make --indep --createorig
+rm -rf debian/*.{ex,EX}
+echo -e -n "settings.xml ${OPT_PATH}/java\n" >> debian/install
+echo -e -n "publish-docker-image.sh ${OPT_PATH}\n" >> debian/install
+echo -e -n "increment-pom-version.sh ${OPT_PATH}\n" >> debian/install
+echo -e -n "Homepage: https://github.com/SwampUpMereMortals/common-ci\n" >> debian/control
+debuild -us -uc
+cd ..
