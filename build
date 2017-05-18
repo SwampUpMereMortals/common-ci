@@ -11,10 +11,10 @@ declare VERSION=$(cat VERSION)
 declare OPT_PATH=/opt/mere-mortals/swampup/
 
 # Package the scripts.
-mkdir "mere-mortal-ci-${VERSION}"
+mkdir "ci-scripts-${VERSION}"
 # TODO: Remove debugging lines.  Travis doesn't like this script much.
 ls -l
-cd "mere-mortal-ci-${VERSION}"
+cd "ci-scripts-${VERSION}"
 cp ../scripts/*.sh .
 cp ../settings/java/settings.xml .
 yes | dh_make --indep --createorig
