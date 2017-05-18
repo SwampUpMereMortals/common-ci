@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 #
 # This is an incredibly crude installation script that bundles up
 # shell scripts into a debian package.  Props go to
