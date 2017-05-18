@@ -1,0 +1,30 @@
+language: bash
+sudo: required
+
+branches:
+  - master
+
+services:
+  - docker
+
+before_install:
+  - git config --global user.email "mere.mortal.ci@gmail.com"
+  - git config --global user.name "Mere Mortal CI"
+
+install:
+  - sudo apt-get update -qq
+  - sudo apt-get install dh-make devscripts -y
+  - echo -e -n "DEBEMAIL=\"mere.mortal.ci@gmail.com\"\n" >> ~/.bashrc
+  - echo -e -n "DEBFULLNAME=\"Mere Mortal CI\"\n" >> ~/.bashrc
+  - echo -e -n "export DEBEMAIL DEBFULLNAME\n" >> ~/.bashrc
+  - source ~/.bashrc
+
+script:
+  - ./build
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+      set -ev;
+      ./publish -n mere-mortal-ci-$(cat VERSION).deb -f $(pwd)/mere-mortal-ci_$(cat VERSION)-1_all.deb -c main;
+    fi
+    #./tag;
+    #./version;
+    #./commit;

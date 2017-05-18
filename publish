@@ -1,0 +1,83 @@
+#!/bin/bash
+#
+# Publish the built debian files to Artifactory using the correct
+# credentials from the CI environment this script is run from.
+set -o nounset
+set -o errexit -o errtrace
+
+readonly DEFAULT_ARCH="amd64"
+readonly DEFAULT_DIST="precise"
+
+
+function Check_Preconditions
+{
+    if [[ -z ${ARTIFACTORY_HEADER_API_KEY} ]]; then
+        echo -e "ERROR: Artifactory API Key must be present as environment variable: ARTIFACTORY_HEADER_API_KEY."
+    fi
+    if [[ -z ${CI} ]]; then
+        echo -e "ERROR: This script must be ran from inside a CI system."
+    fi
+    if [[ -z ${Debian_Package_File} ]]; then
+        echo -e "ERROR: You have to specify the location of the debian package to publish."
+    fi
+    if [[ ! -f ${Debian_Package_File} ]]; then
+        echo -e "ERROR: Debian package file must exist in order to publish it."
+    fi
+    if [[ -z ${Debian_Package_Name} ]]; then
+        echo -e "ERROR: Package Name must be set for the package to be published."
+    fi
+    if [[ "${Debian_Architecture}" == "${DEFAULT_ARCH}" ]]; then
+        echo -e "WARN: Default debian architecture ${DEFAULT_ARCH} is being used."
+    fi
+    if [[ "${Debian_Distribution}" == "${DEFAULT_DIST}" ]]; then
+        echo -e "WARN: Default debian distribution ${DEFAULT_DIST} is being used."
+    fi
+    if [[ -z ${Debian_Component} ]]; then
+        echo -e "ERROR: Component must be set."
+    fi
+}
+
+
+# Capture the arguments needed in order to publish this using the
+# Artifactory REST API via curl.  All of these are required.
+declare Debian_Package_Name=
+declare Debian_Distribution=${DEFAULT_DIST}
+declare Debian_Architecture=${DEFAULT_ARCH}
+declare Debian_Component=
+declare Debian_Package_File=
+
+while getopts "n:d:a:c:f:" opt; do
+    case $opt in
+        n)
+            Debian_Package_Name=$OPTARG
+            ;;
+        d)
+            Debian_Distribution=$OPTARG
+            ;;
+        a)
+            Debian_Architecture=$OPTARG
+            ;;
+        c)
+            Debian_Component=$OPTARG
+            ;;
+        f)
+            Debian_Package_File=$OPTARG
+            ;;
+        \?)
+            # TODO: Print usage.
+            "Not a valid flag argument."
+            ;;
+    esac
+done
+
+
+Check_Preconditions
+echo -e "INFO: Publishing ${Debian_Package_Name} to artifactory.\n
+$(dpkg-deb -I ${Debian_Package_File} | grep Version)."
+
+# Use the JFrog Artifactory REST API to now upload the debian package
+# file.  Headers for the checksum and the API Key must be present.
+curl -H "X-JFrog-Art-Api: ${ARTIFACTORY_HEADER_API_KEY}" \
+     -H "X-Checksum-Sha1: $(sha1sum ${Debian_Package_File} | awk '{print $1}')" \
+     -XPUT "https://meremortal.jfrog.io/meremortal/mortal-debian/pool/${Debian_Package_Name};deb.distribution=${Debian_Distribution};deb.component=${Debian_Component};deb.architecture=${Debian_Architecture}" \
+     -T ${Debian_Package_File}
