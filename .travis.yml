@@ -23,7 +23,7 @@ script:
   - ./build
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
       set -ev;
-      ./publish -n mere-mortal-ci-$(cat VERSION).deb -f $(pwd)/mere-mortal-ci_$(cat VERSION)-1_all.deb -c main;
+      ./publish -n ci-scripts-$(cat VERSION).deb -f $(pwd)/ci-scripts_$(cat VERSION)-1_all.deb -c main;
     fi
 #./tag;
 #./version;
