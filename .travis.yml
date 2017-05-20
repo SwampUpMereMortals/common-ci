@@ -25,6 +25,6 @@ script:
       set -ev;
       ./publish -n mere-mortal-ci-$(cat VERSION).deb -f $(pwd)/mere-mortal-ci_$(cat VERSION)-1_all.deb -c main;
     fi
-    #./tag;
-    #./version;
-    #./commit;
+#./tag;
+#./version;
+#./commit;
