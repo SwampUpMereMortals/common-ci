@@ -28,6 +28,6 @@ script:
       ./tag;
       ./increment-version;
       git add VERSION;
-      git commit -m "Set next development iteration $(echo VERSION)";
+      git commit -m "[skip ci] Set next development iteration $(echo VERSION)";
       git push origin HEAD:master;
     fi
