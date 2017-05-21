@@ -19,8 +19,8 @@ git tag -a v$CURRENT_VERSION -m "v$CURRENT_VERSION"
 
 # Set next version and bump pom file to it.
 # assume the version is in gradle.properties
-NEW_VERSION=$(echo ${CURRENT_VERSION} | perl -e '@va=split(/\./,<>); $va[$#va]++; print join(".", @va);')
-sed -i '' -e "s/currentVersion=.*/currentVersion=$NEW_VERSION/g" gradle.properties
+declare NEW_VERSION=$(echo ${CURRENT_VERSION} | perl -e '@va=split(/\./,<>); $va[$#va]++; print join(".", @va);')
+sed -ie "s/currentVersion=.*/currentVersion=$NEW_VERSION/g" gradle.properties
 
 echo "  - Commit to github.."
 git add gradle.properties
