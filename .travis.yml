@@ -22,7 +22,7 @@ install:
 
 script:
   - ./build
-  - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
       set -ev;
       ./publish -n ci-scripts-$(cat VERSION).deb -f $(pwd)/ci-scripts_$(cat VERSION)-1_all.deb -c main;
       ./tag;
