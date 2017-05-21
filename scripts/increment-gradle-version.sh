@@ -14,7 +14,7 @@ set -o errexit -o errtrace -o nounset
 
 
 # Capture Current version & tag it.
-declare CURRENT_VERSION=$(./gradlew -q printVersion)
+declare CURRENT_VERSION=$(grep currentVersion gradle.properties | awk -F= '{print $2}')
 git tag -a v$CURRENT_VERSION -m "v$CURRENT_VERSION"
 
 # Set next version and bump pom file to it.
