@@ -12,8 +12,6 @@ declare OPT_PATH=/opt/mere-mortals/swampup/
 
 # Package the scripts.
 mkdir "ci-scripts-${VERSION}"
-# TODO: Remove debugging lines.  Travis doesn't like this script much.
-ls -l
 cd "ci-scripts-${VERSION}"
 cp ../scripts/*.sh .
 cp ../settings/java/settings.xml .
@@ -22,6 +20,7 @@ rm -rf debian/*.{ex,EX}
 echo -e -n "settings.xml ${OPT_PATH}/java\n" >> debian/install
 echo -e -n "publish-docker-image.sh ${OPT_PATH}\n" >> debian/install
 echo -e -n "increment-pom-version.sh ${OPT_PATH}\n" >> debian/install
+echo -e -n "increment-gradle-version.sh ${OPT_PATH}\n" >> debian/install
 echo -e -n "Homepage: https://github.com/SwampUpMereMortals/common-ci\n" >> debian/control
 debuild -us -uc
 cd ..
