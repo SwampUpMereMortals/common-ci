@@ -8,6 +8,7 @@ services:
   - docker
 
 before_install:
+  - git config remote.origin.url https://${GH_TOKEN}@github.com/SwampUpMereMortals/common-ci.git
   - git config --global user.email "mere.mortal.ci@gmail.com"
   - git config --global user.name "Mere Mortal CI"
 
@@ -21,7 +22,7 @@ install:
 
 script:
   - ./build
-  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+  - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
       set -ev;
       ./publish -n ci-scripts-$(cat VERSION).deb -f $(pwd)/ci-scripts_$(cat VERSION)-1_all.deb -c main;
       ./tag;
