@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# Bump the patch version in the VERSION file.
+set -o nounset
+readonly version=$(cat VERSION)
+
+# Split up the version on the decimals into an array.  Bash arrays are
+# known to cause side effects, like headaches and random itching.  Be
+# forewarned.
+declare semver=(${version//./ })
+declare major=${semver[0]}
+declare minor=${semver[1]}
+declare patch=${semver[2]}
+
+# Bump the version.
+declare new_patch=${patch}
+(( new_patch+=1 ))
+
+declare new_version="${major}.${minor}.${new_patch}"
+echo -n "${new_version}" > ./VERSION

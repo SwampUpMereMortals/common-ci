@@ -24,7 +24,9 @@ script:
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
       set -ev;
       ./publish -n ci-scripts-$(cat VERSION).deb -f $(pwd)/ci-scripts_$(cat VERSION)-1_all.deb -c main;
+      ./tag;
+      ./increment-version;
+      git add VERSION;
+      git commit -m "Set next development iteration $(echo VERSION)";
+      git push origin HEAD:master;
     fi
-#./tag;
-#./version;
-#./commit;
