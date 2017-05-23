@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mm-crispy-barnacle
+  labels:
+    version: v1
+    date: 20170512T000000Z
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      name: mm-crispy-barnacle
+  template:
+    metadata:
+      labels:
+        name: mm-crispy-barnacle
+    spec:
+      containers:
+        - name: crispy-barnacle
+          image: 'meremortals-mortal-docker.jfrog.io/crispy-barnacle:1.2.3'
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: image-secret
