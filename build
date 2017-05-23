@@ -20,8 +20,12 @@ cp ../settings/java/settings.xml .
 yes | dh_make --indep --createorig
 rm -rf debian/*.{ex,EX}
 echo -e -n "settings.xml ${OPT_PATH}/java\n" >> debian/install
-echo -e -n "publish-docker-image.sh ${OPT_PATH}\n" >> debian/install
-echo -e -n "increment-pom-version.sh ${OPT_PATH}\n" >> debian/install
+
+for file in scripts/*;do
+	newfile=$(basename $file)
+	echo -e -n "$newfile ${OPT_PATH}\n" >> debian/install
+done
+
 echo -e -n "Homepage: https://github.com/SwampUpMereMortals/common-ci\n" >> debian/control
 debuild -us -uc
 cd ..
