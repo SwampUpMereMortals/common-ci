@@ -6,6 +6,7 @@
 # for saving me about a week wrestling with deb packages.
 set -o nounset
 set -o errexit -o errtrace
+set -x
 
 declare VERSION=$(cat VERSION)
 declare OPT_PATH=/opt/mere-mortals/swampup/
@@ -23,5 +24,9 @@ for file in scripts/*;do
 	echo -e -n "$newfile ${OPT_PATH}\n" >> debian/install
 done
 echo -e -n "Homepage: https://github.com/SwampUpMereMortals/common-ci\n" >> debian/control
+
+echo debian/install
+cat debain/install
+
 debuild -us -uc
 cd ..
