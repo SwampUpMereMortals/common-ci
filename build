@@ -26,7 +26,7 @@ done
 echo -e -n "Homepage: https://github.com/SwampUpMereMortals/common-ci\n" >> debian/control
 
 echo debian/install
-cat debain/install
+cat debian/install
 
 debuild -us -uc
 cd ..
