@@ -10,7 +10,7 @@
 # TODO: Implement some reasonable error handling, filepath checking,
 # etc.
 set -o nounset -o errexit
-set -x
+
 declare CREDENTIAL_FILE=$1
 declare GOOGLE_KUBE_CLUSTER=$2
 declare GOOGLE_KUBE_ZONE=$3
