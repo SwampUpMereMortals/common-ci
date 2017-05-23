@@ -9,6 +9,8 @@
 # TODO:  Implement some reasonable argument handling.
 # TODO: Implement some reasonable error handling, filepath checking,
 # etc.
+set -o nounset -o errexit
+set -x
 declare CREDENTIAL_FILE=$1
 declare GOOGLE_KUBE_CLUSTER=$2
 declare GOOGLE_KUBE_ZONE=$3
@@ -17,17 +19,20 @@ readonly GOOGLE_PROJECT=mere-mortals
 
 
 ### Install the Gcloud SDK
+echo -e -n "******************** INSTALLING gcloud ********************\n\n"
 rm -rf ${HOME}/google-cloud-sdk
 curl https://sdk.cloud.google.com | bash
 sudo gcloud auth activate-service-account --key-file ${CREDENTIAL_FILE}
 
 ### Configure gcloud
+echo -e -n "******************** Configuring gcloud ********************\n\n"
 gcloud config set container/cluster ${GOOGLE_KUBE_CLUSTER}
 gcloud config set compute/zone ${GOOGLE_KUBE_ZONE}
 gcloud config set project ${GOOGLE_PROJECT}
 
 
 #### Setup Kubectl
+echo -e -n "******************** Install & Config kubectl ********************\n\n"
 # Install the kubernetes component
 sudo gcloud components install kubectl
 # Add kubectl to path
