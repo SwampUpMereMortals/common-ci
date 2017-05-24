@@ -5,4 +5,4 @@ YAML_FILE=$1
 IMAGE_NAME=$2
 IMAGE_TAG=$3
 
-sed -i '' -e "s/^\( *image: *.\).*\(.\)$/\1$IMAGE_NAME:$IMAGE_TAG\2/g" $YAML_FILE
+sed -ie "s/^\( *image: *.\).*\(.\)$/\1$IMAGE_NAME:$IMAGE_TAG\2/g" $YAML_FILE
